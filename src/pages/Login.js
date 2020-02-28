@@ -4,8 +4,9 @@ import { Helmet } from "react-helmet";
 function Login() {
   return (
     <div>
-      {" "}
-      <Helmet title="Login" />
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
       <p>Login</p>
     </div>
   );
