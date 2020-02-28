@@ -4,9 +4,7 @@ import { Helmet } from "react-helmet";
 function Home() {
   return (
     <div>
-      <Helmet>
-        <title>Home</title>
-      </Helmet>
+      <Helmet title="Home" />
       <p>Home</p>
     </div>
   );
