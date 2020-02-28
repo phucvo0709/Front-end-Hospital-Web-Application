@@ -1,9 +1,11 @@
 import React, { useEffect, Fragment } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// redux
 import { Provider } from "react-redux";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
+//pages
 import "./static/sass/styles.scss";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Routes from "./pages/Routes";
 import Home from "./pages/Home";
 
@@ -14,7 +16,6 @@ function App() {
       // store.dispatch(loadUser());
     }
   }, []);
-
   return (
     <Provider store={store}>
       <Router>

@@ -10,9 +10,12 @@ function Routes() {
   return (
     <section className="container">
       <Switch>
+        {/* public */}
         <Route exact path="/register" component={Register} />
         <Route exact path="/login" component={Login} />
+        {/* private */}
         <PrivateRoute excat path="/profile" component={Profile} />
+        {/* not found */}
         <Route component={NotFound} />
       </Switch>
     </section>
