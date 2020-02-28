@@ -19,7 +19,6 @@ function Routes() {
         <PublicRoute exact path="/register" component={Register} />
         {/* private */}
         <PrivateRoute exact path="/profile" component={Profile} />
-        {/* not found */}
         <PublicRoute component={NotFound} />
       </Switch>
     </section>
