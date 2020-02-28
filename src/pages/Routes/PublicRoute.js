@@ -11,15 +11,17 @@ function PublicLayout(props) {
   );
 }
 
-const PublicRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props => (
-      <PublicLayout>
-        <Component {...props} />
-      </PublicLayout>
-    )}
-  />
-);
+function PublicRoute({ component: Component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props => (
+        <PublicLayout>
+          <Component {...props} />
+        </PublicLayout>
+      )}
+    />
+  );
+}
 
 export default PublicRoute;

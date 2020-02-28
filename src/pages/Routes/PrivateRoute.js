@@ -14,24 +14,26 @@ function PrivateLayout(props) {
     </Fragment>
   );
 }
-const PrivateRoute = ({
+function PrivateRoute({
   component: Component,
   users: { isAuthenticated },
   ...rest
-}) => (
-  <Route
-    {...rest}
-    render={props =>
-      isAuthenticated ? (
-        <PrivateLayout>
-          <Component {...props} />
-        </PrivateLayout>
-      ) : (
-        <Redirect to="/login" />
-      )
-    }
-  />
-);
+}) {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated ? (
+          <PrivateLayout>
+            <Component {...props} />
+          </PrivateLayout>
+        ) : (
+          <Redirect to="/login" />
+        )
+      }
+    />
+  );
+}
 
 PrivateRoute.propTypes = {
   users: PropTypes.object.isRequired
