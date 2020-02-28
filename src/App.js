@@ -6,7 +6,7 @@ import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
 //pages
 import "./static/sass/styles.scss";
-import Routes from "./pages/Routes";
+import Routes from "./pages";
 import Home from "./pages/Home";
 
 function App() {
