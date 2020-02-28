@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "./store";
 import setAuthToken from "./utils/setAuthToken";
+import "./static/sass/styles.scss";
 
 function App() {
   useEffect(() => {
@@ -10,13 +11,10 @@ function App() {
       // store.dispatch(loadUser());
     }
   }, []);
+
   return (
     <Provider store={store}>
-      <div className="App">
-        <header className="App-header">
-          <p>index</p>
-        </header>
-      </div>
+      <p className="test-css">index</p>
     </Provider>
   );
 }

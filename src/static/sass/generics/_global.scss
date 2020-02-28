@@ -1,0 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.test-css {
+  color: $main-color;
+  font-size: $main-font-size;
+  font-family: $main-font-family;
+}
