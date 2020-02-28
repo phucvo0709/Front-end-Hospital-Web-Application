@@ -1,13 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Route } from "react-router-dom";
 import HeadComponent from "../../components/HeadComponent";
 
 function PublicLayout(props) {
   return (
-    <div>
+    <Fragment>
       <HeadComponent />
       {props.children}
-    </div>
+    </Fragment>
   );
 }
 

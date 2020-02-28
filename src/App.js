@@ -7,7 +7,6 @@ import setAuthToken from "./utils/setAuthToken";
 //pages
 import "./static/sass/styles.scss";
 import Routes from "./pages";
-import Home from "./pages/Home";
 
 function App() {
   useEffect(() => {
@@ -21,7 +20,6 @@ function App() {
       <Router>
         <Fragment>
           <Switch>
-            <Route exact path="/" component={Home} />
             <Route component={Routes} />
           </Switch>
         </Fragment>

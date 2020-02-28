@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -7,11 +7,11 @@ import HeaderComponent from "../../components/HeaderComponent";
 
 function PrivateLayout(props) {
   return (
-    <div>
+    <Fragment>
       <HeadComponent />
       <HeaderComponent />
       {props.children}
-    </div>
+    </Fragment>
   );
 }
 const PrivateRoute = ({

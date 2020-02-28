@@ -14,7 +14,7 @@ function Routes() {
     <section className="container">
       <Switch>
         {/* public */}
-        <PublicRoute exact path="/home" component={Home} />
+        <PublicRoute exact path="/" component={Home} />
         <PublicRoute exact path="/login" component={Login} />
         <PublicRoute exact path="/register" component={Register} />
         {/* private */}
