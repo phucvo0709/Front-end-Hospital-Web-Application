@@ -3,22 +3,16 @@ import { Switch } from "react-router-dom";
 import PublicRoute from "../pages/Routes/PublicRoute";
 import PrivateRoute from "../pages/Routes/PrivateRoute";
 // pages
-import Home from "./Home";
-import Register from "./Register";
-import Login from "./Login";
-import Profile from "./Profile";
+import Rooms from "./Rooms";
+import Customers from "./Customers";
 import NotFound from "./NotFound";
 
 function Routes() {
   return (
     <section className="container">
       <Switch>
-        {/* public */}
-        <PublicRoute exact path="/" component={Home} />
-        <PublicRoute exact path="/login" component={Login} />
-        <PublicRoute exact path="/register" component={Register} />
-        {/* private */}
-        <PrivateRoute exact path="/profile" component={Profile} />
+        <PrivateRoute exact path="/" component={Rooms} />
+        <PrivateRoute exact path="/customers" component={Customers} />
         <PublicRoute component={NotFound} />
       </Switch>
     </section>

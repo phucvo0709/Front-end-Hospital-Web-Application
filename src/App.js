@@ -1,20 +1,15 @@
-import React, { useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // redux
 import { Provider } from "react-redux";
-import store from "./store";
-import setAuthToken from "./utils/setAuthToken";
+import withRedux from "next-redux-wrapper";
+import createStore from "./store";
 //pages
 import "./static/sass/styles.scss";
 import Routes from "./pages";
 
-function App() {
-  useEffect(() => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-      // store.dispatch(loadUser());
-    }
-  }, []);
+function App(props) {
+  const { store } = props;
   return (
     <Provider store={store}>
       <Router>
@@ -28,4 +23,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRedux(createStore)(App);

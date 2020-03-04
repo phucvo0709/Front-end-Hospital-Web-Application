@@ -1,0 +1,11 @@
+@media (max-width: 600px) {
+  .ant-table-content {
+    overflow: scroll !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .ant-table-content {
+    overflow-x: hidden !important;
+  }
+}

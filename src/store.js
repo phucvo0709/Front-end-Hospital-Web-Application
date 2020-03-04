@@ -1,34 +1,18 @@
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 
-const initialState = {};
-
-const middleware = [thunk];
-
-const store = createStore(
-  rootReducer,
-  initialState,
-  composeWithDevTools(applyMiddleware(...middleware))
-);
-
-// set up a store subscription listener
-// to store the users token in localStorage
-
-let currentState;
-
-store.subscribe(() => {
-  // keep track of the previous and current state to compare changes
-  let previousState = currentState;
-  currentState = store.getState();
-  // if the token changes set the value in localStorage
-  if (previousState && previousState.auth.token !== currentState.auth.token) {
-    const token = currentState.auth.token;
-    token
-      ? localStorage.setItem("token", token)
-      : localStorage.removeItem("token");
+const bindMiddleware = middleware => {
+  if (process.env.NODE_ENV !== "production") {
+    const { composeWithDevTools } = require("redux-devtools-extension");
+    return composeWithDevTools(applyMiddleware(...middleware));
   }
-});
+  return applyMiddleware(...middleware);
+};
 
-export default store;
+function configureStore(initialState = {}) {
+  const store = createStore(rootReducer, initialState, bindMiddleware([thunk]));
+  return store;
+}
+
+export default configureStore;

@@ -1,4 +1,5 @@
 export const DEFAULT_SITEURL = "http://localhost:3000";
+export const DEFAULT_APIURL = "http://localhost:4000/api/";
 export const DEFAULT_TITLE = "TITLE";
 export const DEFAULT_DESCRIPTION = "DESCRIPTION";
 export const DEFAULT_TWITTER = "@react";
