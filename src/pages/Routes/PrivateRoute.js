@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, Redirect, Link } from "react-router-dom";
+import { Route, Redirect, Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import HeadComponent from "../../components/HeadComponent";
@@ -22,6 +22,7 @@ function PrivateLayout(props) {
       icon: <UserOutlined />
     }
   ]);
+  const location = useLocation();
   return (
     <Layout style={{ height: "100vh" }}>
       <HeadComponent />
@@ -43,10 +44,10 @@ function PrivateLayout(props) {
             margin: "16px"
           }}
         />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+        <Menu theme="dark" mode="inline" selectedKeys={[location.pathname]}>
           {menus.map(menu => {
             return (
-              <Menu.Item key={menu.id}>
+              <Menu.Item key={menu.link}>
                 <Link to={menu.link}>
                   <div>
                     {menu.icon}

@@ -7,6 +7,7 @@ export {
   onUnmountStatus,
   onUnmountCustomers,
   onUnmountCustomer,
+  onUnSuccessCustomer,
   onUnmountRooms,
   onUnmountRoom,
   onUnSuccessRoom
@@ -19,3 +20,11 @@ export {
   onUpdateRoom,
   onDeleteRoom
 } from "./roomActions";
+//CUSTOMERS
+export {
+  onGetCustomers,
+  onGetCustomer,
+  onAddCustomer,
+  onUpdateCustomer,
+  onDeleteCustomer
+} from "./customerActions";

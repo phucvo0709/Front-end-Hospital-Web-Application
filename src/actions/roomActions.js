@@ -9,7 +9,7 @@ import {
   SET_ROOM_IN_ROOMS
 } from "./../constants/actionTypes";
 
-export const onGetRooms = (metadata, type) => dispatch => {
+export const onGetRooms = metadata => dispatch => {
   axios
     .get("rooms/", {
       params: metadata
@@ -74,7 +74,7 @@ export const onUpdateRoom = (id, data) => dispatch => {
     });
 };
 
-export const onDeleteRoom = (id, metadata) => dispatch => {
+export const onDeleteRoom = id => dispatch => {
   axios
     .delete(`rooms/${id}/`)
     .then(res => {

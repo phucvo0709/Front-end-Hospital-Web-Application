@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal, Form, Input } from "antd";
-function ModalRoom(props) {
+function ModalCustomer(props) {
   const {
     title,
     visible,
@@ -10,6 +10,7 @@ function ModalRoom(props) {
     setFields,
     loading
   } = props;
+
   const layout = {
     labelCol: { span: 4 },
     wrapperCol: { span: 20 }
@@ -53,4 +54,4 @@ function ModalRoom(props) {
   );
 }
 
-export default ModalRoom;
+export default ModalCustomer;
