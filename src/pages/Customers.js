@@ -14,6 +14,7 @@ import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 import ModalCustomer from "../components/Customers/ModalCustomer";
 import isEmpty from "../validation/is-empty";
+import { dateFormat } from "../utils/dateFormat";
 
 function Customers(props) {
   //hooks
@@ -25,6 +26,14 @@ function Customers(props) {
       title: "Name",
       dataIndex: "name",
       key: "name"
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text, record) => {
+        return dateFormat(record.createdAt);
+      }
     },
     {
       title: "Action",
