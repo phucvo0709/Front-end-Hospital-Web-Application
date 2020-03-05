@@ -14,6 +14,11 @@ import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 import ModalRoom from "../components/Rooms/ModalRoom";
 import isEmpty from "../validation/is-empty";
+import {
+  TEXT_CONFIRM_DELETE,
+  TEXT_CREATE_ROOM,
+  TEXT_UPDATE_ROOM
+} from "../constants/message";
 
 function Rooms(props) {
   //hooks
@@ -42,7 +47,7 @@ function Rooms(props) {
             <Divider type="vertical" />
             <Popconfirm
               placement="bottomRight"
-              title="Confirm Delete!"
+              title={TEXT_CONFIRM_DELETE}
               onConfirm={() => handleDeleteRecord(record._id)}
             >
               <Button type="danger" icon={<DeleteFilled />} />
@@ -56,14 +61,26 @@ function Rooms(props) {
   const [room, setRoom] = useState({});
   const [loadingTable, setLoadingTable] = useState(true);
   //modal
-  const [actionModalRoom, setActionModalRoom] = useState("Create Room");
+  const [actionModalRoom, setActionModalRoom] = useState(TEXT_CREATE_ROOM);
   const [loadingButtonRoom, setLoadingButtonRoom] = useState(false);
   const [showModalRoom, setShowModalRoom] = useState(false);
-  const [fields, setFields] = useState([{ name: "name", value: "" }]);
 
+  // rooms
   useEffect(() => {
     dispatch(onGetRooms());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (rooms.rooms !== dataRooms) {
+      setLoadingTable(false);
+      setDataRooms(rooms.rooms);
+    }
+  }, [rooms.rooms, dataRooms]);
+
+  //room
+  useEffect(() => {
+    setRoom(rooms.room);
+  }, [rooms.room]);
 
   useEffect(() => {
     if (rooms.successRoom) {
@@ -73,31 +90,15 @@ function Rooms(props) {
     }
   }, [rooms.successRoom, dispatch]);
 
-  useEffect(() => {
-    if (rooms.rooms !== dataRooms) {
-      setLoadingTable(false);
-      setDataRooms(rooms.rooms);
-    }
-  }, [rooms.rooms, dataRooms]);
-
-  useEffect(() => {
-    if (rooms.room !== room) {
-      setRoom(rooms.room);
-      if (isEmpty(rooms.room)) {
-        setActionModalRoom("Create Room");
-        setFields([{ name: "name", value: "" }]);
-      } else {
-        setActionModalRoom("Edit Room");
-        setFields([{ name: "name", value: rooms.room.name }]);
-      }
-    }
-  }, [rooms.room, room]);
-
+  // function
   function handleModalRoom(id) {
-    if (id) {
+    if (!isEmpty(id)) {
+      setActionModalRoom(TEXT_UPDATE_ROOM);
       dispatch(onGetRoom(id));
+    } else {
+      setActionModalRoom(TEXT_CREATE_ROOM);
+      dispatch(onUnSuccessRoom());
     }
-    dispatch(onUnSuccessRoom());
     setShowModalRoom(!showModalRoom);
   }
 
@@ -113,13 +114,10 @@ function Rooms(props) {
 
   function handleSubmitRoom(values) {
     setLoadingButtonRoom(true);
-    const data = {
-      name: values.name
-    };
-    if (actionModalRoom === "Create Room" && isEmpty(room)) {
-      dispatch(onAddRoom(data));
+    if (actionModalRoom === TEXT_CREATE_ROOM) {
+      dispatch(onAddRoom(values));
     } else {
-      dispatch(onUpdateRoom(room._id, data));
+      dispatch(onUpdateRoom(room._id, values));
     }
   }
 
@@ -135,14 +133,14 @@ function Rooms(props) {
             type="primary"
             onClick={() => handleModalRoom()}
           >
-            Create Room
+            {TEXT_CREATE_ROOM}
           </Button>
         </Col>
         <ModalRoom
           title={actionModalRoom}
           visible={showModalRoom}
-          fields={fields}
-          setFields={setFields}
+          room={room}
+          setRoom={setRoom}
           onCancel={handleCancel}
           onFinish={handleSubmitRoom}
           loading={loadingButtonRoom}

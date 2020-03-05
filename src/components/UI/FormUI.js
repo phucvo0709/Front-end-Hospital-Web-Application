@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Button } from "antd";
 import isEmpty from "../../validation/is-empty";
+import { TEXT_SUBMIT_BUTTON } from "../../constants/message";
 
 function FormUI(props) {
   const [form] = Form.useForm();
   const [, forceUpdate] = useState();
   const [formLayout, setFormLayout] = useState("horizontal");
-  const { initialValues, setInitialValues, loading, onFinish } = props;
+  const { loading, initialValues, setInitialValues, onFinish } = props;
 
   function onFormChange(key, value) {
     setInitialValues(value);
@@ -66,21 +67,10 @@ function FormUI(props) {
         onValuesChange={onFormChange}
         onFinish={onFormFinish}
       >
-        <Form.Item
-          name={["name"]}
-          label="Name"
-          rules={[
-            {
-              required: true,
-              message: "Please input your nickname"
-            }
-          ]}
-        >
-          <Input placeholder="Eneter a name" />
-        </Form.Item>
+        {props.children}
         <Form.Item {...buttonItemLayout}>
           <Button type="primary" loading={loading} htmlType="submit">
-            Submit
+            {TEXT_SUBMIT_BUTTON}
           </Button>
         </Form.Item>
       </Form>

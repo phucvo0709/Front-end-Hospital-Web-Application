@@ -15,6 +15,11 @@ import { Helmet } from "react-helmet";
 import ModalCustomer from "../components/Customers/ModalCustomer";
 import isEmpty from "../validation/is-empty";
 import { dateFormat } from "../utils/dateFormat";
+import {
+  TEXT_CONFIRM_DELETE,
+  TEXT_CREATE_CUSTOMER,
+  TEXT_UPDATE_CUSTOMER
+} from "../constants/message";
 
 function Customers(props) {
   //hooks
@@ -51,7 +56,7 @@ function Customers(props) {
             <Divider type="vertical" />
             <Popconfirm
               placement="bottomRight"
-              title="Confirm Delete!"
+              title={TEXT_CONFIRM_DELETE}
               onConfirm={() => handleDeleteRecord(record._id)}
             >
               <Button type="danger" icon={<DeleteFilled />} />
@@ -66,7 +71,7 @@ function Customers(props) {
   const [loadingTable, setLoadingTable] = useState(true);
   //modal
   const [actionModalCustomer, setActionModalCustomer] = useState(
-    "Create Customer"
+    TEXT_CREATE_CUSTOMER
   );
   const [loadingButtonCustomer, setLoadingButtonCustomer] = useState(false);
   const [showModalCustomer, setShowModalCustomer] = useState(false);
@@ -99,10 +104,10 @@ function Customers(props) {
   // function
   function handleModalCustomer(id) {
     if (!isEmpty(id)) {
-      setActionModalCustomer("Edit Customer");
+      setActionModalCustomer(TEXT_UPDATE_CUSTOMER);
       dispatch(onGetCustomer(id));
     } else {
-      setActionModalCustomer("Create Customer");
+      setActionModalCustomer(TEXT_CREATE_CUSTOMER);
       dispatch(onUnSuccessCustomer());
     }
     setShowModalCustomer(!showModalCustomer);
@@ -120,7 +125,7 @@ function Customers(props) {
 
   function handleSubmitCustomer(values) {
     setLoadingButtonCustomer(true);
-    if (actionModalCustomer === "Create Customer") {
+    if (actionModalCustomer === TEXT_CREATE_CUSTOMER) {
       dispatch(onAddCustomer(values));
     } else {
       dispatch(onUpdateCustomer(customer._id, values));
@@ -139,7 +144,7 @@ function Customers(props) {
             type="primary"
             onClick={() => handleModalCustomer()}
           >
-            Create Customer
+            {TEXT_CREATE_CUSTOMER}
           </Button>
         </Col>
         <ModalCustomer

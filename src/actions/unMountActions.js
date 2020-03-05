@@ -40,6 +40,9 @@ export const onUnmountRoom = () => dispatch => {
     dispatch({
       type: UN_ROOM
     });
+    dispatch({
+      type: UN_SUCCESS_ROOM
+    });
   });
 };
 
