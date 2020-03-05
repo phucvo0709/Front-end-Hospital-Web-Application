@@ -70,11 +70,23 @@ function Customers(props) {
   );
   const [loadingButtonCustomer, setLoadingButtonCustomer] = useState(false);
   const [showModalCustomer, setShowModalCustomer] = useState(false);
-  const [fields, setFields] = useState([{ name: "name", value: "" }]);
 
+  // customers
   useEffect(() => {
     dispatch(onGetCustomers());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (customers.customers !== dataCustomers) {
+      setLoadingTable(false);
+      setDataCustomers(customers.customers);
+    }
+  }, [customers.customers, dataCustomers]);
+
+  //customer
+  useEffect(() => {
+    setCustomer(customers.customer);
+  }, [customers.customer]);
 
   useEffect(() => {
     if (customers.successCustomer) {
@@ -84,31 +96,15 @@ function Customers(props) {
     }
   }, [customers.successCustomer, dispatch]);
 
-  useEffect(() => {
-    if (customers.customers !== dataCustomers) {
-      setLoadingTable(false);
-      setDataCustomers(customers.customers);
-    }
-  }, [customers.customers, dataCustomers]);
-
-  useEffect(() => {
-    if (customers.customer !== customer) {
-      setCustomer(customers.customer);
-      if (isEmpty(customers.customer)) {
-        setActionModalCustomer("Create Customer");
-        setFields([{ name: "name", value: "" }]);
-      } else {
-        setActionModalCustomer("Edit Customer");
-        setFields([{ name: "name", value: customers.customer.name }]);
-      }
-    }
-  }, [customers.customer, customer]);
-
+  // function
   function handleModalCustomer(id) {
-    if (id) {
+    if (!isEmpty(id)) {
+      setActionModalCustomer("Edit Customer");
       dispatch(onGetCustomer(id));
+    } else {
+      setActionModalCustomer("Create Customer");
+      dispatch(onUnSuccessCustomer());
     }
-    dispatch(onUnSuccessCustomer());
     setShowModalCustomer(!showModalCustomer);
   }
 
@@ -124,13 +120,10 @@ function Customers(props) {
 
   function handleSubmitCustomer(values) {
     setLoadingButtonCustomer(true);
-    const data = {
-      name: values.name
-    };
-    if (actionModalCustomer === "Create Customer" && isEmpty(customer)) {
-      dispatch(onAddCustomer(data));
+    if (actionModalCustomer === "Create Customer") {
+      dispatch(onAddCustomer(values));
     } else {
-      dispatch(onUpdateCustomer(customer._id, data));
+      dispatch(onUpdateCustomer(customer._id, values));
     }
   }
 
@@ -152,8 +145,8 @@ function Customers(props) {
         <ModalCustomer
           title={actionModalCustomer}
           visible={showModalCustomer}
-          fields={fields}
-          setFields={setFields}
+          customer={customer}
+          setCustomer={setCustomer}
           onCancel={handleCancel}
           onFinish={handleSubmitCustomer}
           loading={loadingButtonCustomer}

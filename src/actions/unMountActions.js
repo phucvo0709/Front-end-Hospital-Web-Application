@@ -74,6 +74,9 @@ export const onUnmountCustomer = () => dispatch => {
     dispatch({
       type: UN_CUSTOMER
     });
+    dispatch({
+      type: UN_SUCCESS_CUSTOMER
+    });
   });
 };
 
