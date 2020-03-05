@@ -6,7 +6,8 @@ import {
   SET_CUSTOMER,
   PUSH_CUSTOMER,
   PULL_CUSTOMER,
-  SET_CUSTOMER_IN_CUSTOMERS
+  SET_CUSTOMER_IN_CUSTOMERS,
+  SET_SUCCESS_CUSTOMER
 } from "./../constants/actionTypes";
 import isEmpty from "../validation/is-empty";
 import { onGetRoom } from "./roomActions";
@@ -62,14 +63,22 @@ export const onAddCustomer = data => dispatch => {
     });
 };
 
-export const onUpdateCustomer = (id, data) => dispatch => {
+export const onUpdateCustomer = (idCustomer, data, idRoom) => dispatch => {
+  console.log(idRoom);
   axios
-    .put(`customers/${id}/`, data)
+    .put(`customers/${idCustomer}/`, data)
     .then(res => {
-      dispatch({
-        type: SET_CUSTOMER_IN_CUSTOMERS,
-        payload: res.data
-      });
+      if (isEmpty(idRoom)) {
+        dispatch({
+          type: SET_CUSTOMER_IN_CUSTOMERS,
+          payload: res.data
+        });
+      } else {
+        dispatch(onGetRoom(idRoom));
+        dispatch({
+          type: SET_SUCCESS_CUSTOMER
+        });
+      }
     })
     .catch(err => {
       console.log(err);

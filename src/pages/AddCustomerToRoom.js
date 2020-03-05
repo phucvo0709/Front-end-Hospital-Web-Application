@@ -8,12 +8,18 @@ import {
   onUnSuccessCustomer,
   onAddCustomerToRoom,
   onAddCustomerToProcessing,
-  onDeleteCustomer
+  onDeleteCustomer,
+  onGetCustomer,
+  onUpdateCustomer
 } from "../actions";
 import isEmpty from "../validation/is-empty";
 import ModalCustomer from "../components/Customers/ModalCustomer";
 import { dateFormat } from "../utils/dateFormat";
-import { TEXT_CONFIRM_DELETE } from "../constants/message";
+import {
+  TEXT_CONFIRM_DELETE,
+  TEXT_CREATE_CUSTOMER,
+  TEXT_UPDATE_CUSTOMER
+} from "../constants/message";
 import {
   Popconfirm,
   Table,
@@ -96,10 +102,14 @@ function AddCustomerToRoom() {
       }
     }
   ]);
+  const [loadingNextCustomer, setLoadingNextCustomer] = useState(false);
+
   // state modal
+  const [actionModalCustomer, setActionModalCustomer] = useState(
+    TEXT_CREATE_CUSTOMER
+  );
   const [loadingButtonCustomer, setLoadingButtonCustomer] = useState(false);
   const [showModalCustomer, setShowModalCustomer] = useState(false);
-  const [loadingNextCustomer, setLoadingNextCustomer] = useState(false);
 
   // effects
   useEffect(() => {
@@ -109,6 +119,20 @@ function AddCustomerToRoom() {
     };
   }, [dispatch, id]);
 
+  //customer
+  useEffect(() => {
+    setCustomer(customers.customer);
+  }, [customers.customer]);
+
+  useEffect(() => {
+    if (customers.successCustomer) {
+      setLoadingButtonCustomer(false);
+      setShowModalCustomer(false);
+      setCustomer({});
+      dispatch(onUnmountCustomer());
+    }
+  }, [customers.successCustomer, dispatch]);
+  //room
   useEffect(() => {
     if (!isEmpty(rooms.successGetRoom)) {
       if (rooms.successGetRoom) {
@@ -121,27 +145,34 @@ function AddCustomerToRoom() {
     }
   }, [rooms.successGetRoom, rooms.room, id, history, dispatch]);
 
-  useEffect(() => {
-    if (customers.successCustomer) {
-      setLoadingButtonCustomer(false);
-      setShowModalCustomer(false);
-      setCustomer({});
-      dispatch(onUnmountCustomer());
-    }
-  }, [customers.successCustomer, dispatch]);
-
   // function
-  function handleModalCustomer() {
-    dispatch(onUnSuccessCustomer());
+  function handleModalCustomer(id) {
+    if (!isEmpty(id)) {
+      setActionModalCustomer(TEXT_UPDATE_CUSTOMER);
+      dispatch(onGetCustomer(id));
+    } else {
+      setActionModalCustomer(TEXT_CREATE_CUSTOMER);
+      dispatch(onUnSuccessCustomer());
+    }
     setShowModalCustomer(!showModalCustomer);
   }
+
   function handleCancel() {
     setShowModalCustomer(false);
+    if (!isEmpty(customer)) {
+      dispatch(onUnmountCustomer());
+    }
   }
+
   function handleSubmitCustomer(values) {
     setLoadingButtonCustomer(true);
-    dispatch(onAddCustomerToRoom(room._id, values));
+    if (actionModalCustomer === TEXT_CREATE_CUSTOMER) {
+      dispatch(onAddCustomerToRoom(room._id, values));
+    } else {
+      dispatch(onUpdateCustomer(customer._id, values, id));
+    }
   }
+
   function handleSubmitNextCustomer() {
     const { customers, currentCustomer } = room;
     setLoadingNextCustomer(true);
@@ -195,11 +226,11 @@ function AddCustomerToRoom() {
             type="primary"
             onClick={() => handleModalCustomer()}
           >
-            Create Customer
+            Create Customer In Room
           </Button>
         </Col>
         <ModalCustomer
-          title="Create and add customer to room"
+          title={TEXT_CREATE_CUSTOMER}
           visible={showModalCustomer}
           customer={customer}
           setCustomer={setCustomer}

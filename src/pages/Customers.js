@@ -97,6 +97,7 @@ function Customers(props) {
     if (customers.successCustomer) {
       setLoadingButtonCustomer(false);
       setShowModalCustomer(false);
+      setCustomer({});
       dispatch(onUnmountCustomer());
     }
   }, [customers.successCustomer, dispatch]);
