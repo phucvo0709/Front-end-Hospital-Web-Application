@@ -8,14 +8,17 @@ import {
   SET_METADATA_ROOMS,
   UN_METADATA_ROOMS,
   UN_SUCCESS_ROOM,
-  SET_ROOM_IN_ROOMS
+  SET_ROOM_IN_ROOMS,
+  SET_SUCCESS_GET_ROOM,
+  UN_SUCCESS_GET_ROOM
 } from "./../constants/actionTypes";
 
 const initialState = {
   rooms: [],
   metadataRooms: {},
   room: {},
-  successRoom: false
+  successRoom: false,
+  successGetRoom: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -50,7 +53,18 @@ const reducer = (state = initialState, action) => {
     case UN_ROOM:
       return {
         ...state,
-        room: {}
+        room: {},
+        successGetRoom: null
+      };
+    case SET_SUCCESS_GET_ROOM:
+      return {
+        ...state,
+        successGetRoom: true
+      };
+    case UN_SUCCESS_GET_ROOM:
+      return {
+        ...state,
+        successGetRoom: false
       };
     case PUSH_ROOM:
       return {

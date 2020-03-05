@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   onGetRooms,
@@ -10,7 +11,7 @@ import {
   onUnmountRoom
 } from "../actions/";
 import { Popconfirm, Divider, Button, Row, Col, Table } from "antd";
-import { EditFilled, DeleteFilled } from "@ant-design/icons";
+import { EditFilled, DeleteFilled, FileAddFilled } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 import ModalRoom from "../components/Rooms/ModalRoom";
 import isEmpty from "../validation/is-empty";
@@ -21,6 +22,7 @@ import {
 } from "../constants/message";
 
 function Rooms(props) {
+  let history = useHistory();
   //hooks
   const rooms = useSelector(state => state.rooms);
   const dispatch = useDispatch();
@@ -39,6 +41,12 @@ function Rooms(props) {
       render: (text, record) => {
         return (
           <span className="container-buttons">
+            <Button
+              type="primary"
+              icon={<FileAddFilled />}
+              onClick={() => handleRedirectToRoom(record._id)}
+            />
+            <Divider type="vertical" />
             <Button
               type="primary"
               icon={<EditFilled />}
@@ -91,6 +99,11 @@ function Rooms(props) {
   }, [rooms.successRoom, dispatch]);
 
   // function
+  function handleRedirectToRoom(id) {
+    history.push({
+      pathname: "/add-customer-to-room/" + id
+    });
+  }
   function handleModalRoom(id) {
     if (!isEmpty(id)) {
       setActionModalRoom(TEXT_UPDATE_ROOM);

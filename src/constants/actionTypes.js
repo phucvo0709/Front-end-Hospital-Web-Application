@@ -25,6 +25,9 @@ export const SET_ROOM_IN_ROOMS = "SET_ROOM_IN_ROOMS";
 export const PULL_ROOM = "PULL_ROOM";
 export const UN_SUCCESS_ROOM = "UN_SUCCESS_ROOM";
 
+export const SET_SUCCESS_GET_ROOM = "SET_SUCCESS_GET_ROOM";
+export const UN_SUCCESS_GET_ROOM = "UN_SUCCESS_GET_ROOM";
+
 //Customers
 export const SET_CUSTOMERS = "SET_CUSTOMERS";
 export const UN_CUSTOMERS = "UN_CUSTOMERS";

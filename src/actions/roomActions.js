@@ -6,7 +6,9 @@ import {
   SET_ROOM,
   PUSH_ROOM,
   PULL_ROOM,
-  SET_ROOM_IN_ROOMS
+  SET_ROOM_IN_ROOMS,
+  SET_SUCCESS_GET_ROOM,
+  UN_SUCCESS_GET_ROOM
 } from "./../constants/actionTypes";
 
 export const onGetRooms = metadata => dispatch => {
@@ -40,9 +42,15 @@ export const onGetRoom = id => dispatch => {
         type: SET_ROOM,
         payload: res.data
       });
+      dispatch({
+        type: SET_SUCCESS_GET_ROOM
+      });
     })
     .catch(err => {
       console.log(err);
+      dispatch({
+        type: UN_SUCCESS_GET_ROOM
+      });
     });
 };
 
