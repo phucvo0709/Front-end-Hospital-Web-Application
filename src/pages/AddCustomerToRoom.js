@@ -1,32 +1,95 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { List, Avatar } from "antd";
-import { onGetRoom, onUnmountRoom } from "../actions";
+import {
+  onGetRoom,
+  onUnmountRoom,
+  onUnmountCustomer,
+  onUnSuccessCustomer,
+  onAddCustomerToRoom,
+  onAddCustomerToProcessing
+} from "../actions";
 import isEmpty from "../validation/is-empty";
+import ModalCustomer from "../components/Customers/ModalCustomer";
+import { dateFormat } from "../utils/dateFormat";
+import { Table, Row, Col, Button, Typography, Alert, Divider } from "antd";
+import { CaretRightFilled } from "@ant-design/icons";
+const { Title } = Typography;
 
 function AddCustomerToRoom() {
   let history = useHistory();
   let { id } = useParams();
   //hooks
   const rooms = useSelector(state => state.rooms);
+  const customers = useSelector(state => state.customers);
   const dispatch = useDispatch();
   //state
-  const [data, setData] = useState([
+  const [room, setRoom] = useState({});
+  const [customer, setCustomer] = useState({});
+  const [columnCustomers] = useState([
     {
-      title: "Ant Design Title 1"
+      title: "Name",
+      dataIndex: "name",
+      key: "name"
     },
     {
-      title: "Ant Design Title 2"
+      title: "Created At",
+      dataIndex: "",
+      key: "createdAt",
+      render: (text, record) => {
+        return dateFormat(record.createdAt);
+      }
+    }
+    // {
+    //   title: "Action",
+    //   dataIndex: "action",
+    //   key: "action",
+    //   width: "10%",
+    //   render: (text, record) => {
+    //     return (
+    //       <span className="container-buttons">
+    //         <Button
+    //           type="primary"
+    //           icon={<EditFilled />}
+    //           onClick={() => handleModalCustomer(record._id)}
+    //         />
+    //         <Divider type="vertical" />
+    //         <Popconfirm
+    //           placement="bottomRight"
+    //           title={TEXT_CONFIRM_DELETE}
+    //           onConfirm={() => handleDeleteRecord(record._id)}
+    //         >
+    //           <Button type="danger" icon={<DeleteFilled />} />
+    //         </Popconfirm>
+    //       </span>
+    //     );
+    //   }
+    // }
+  ]);
+  const [columnCustomersFinished] = useState([
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name"
     },
     {
-      title: "Ant Design Title 3"
-    },
-    {
-      title: "Ant Design Title 4"
+      title: "Created At",
+      dataIndex: "",
+      key: "createdAt",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => {
+        return a.createdAt.localeCompare(b.createdAt);
+      },
+      render: (text, record) => {
+        return dateFormat(record.createdAt);
+      }
     }
   ]);
-  const [room, setRoom] = useState({});
+  // state modal
+  const [loadingButtonCustomer, setLoadingButtonCustomer] = useState(false);
+  const [showModalCustomer, setShowModalCustomer] = useState(false);
+  const [loadingNextCustomer, setLoadingNextCustomer] = useState(false);
+
   // effects
   useEffect(() => {
     dispatch(onGetRoom(id));
@@ -39,6 +102,7 @@ function AddCustomerToRoom() {
     if (!isEmpty(rooms.successGetRoom)) {
       if (rooms.successGetRoom) {
         setRoom(rooms.room);
+        setLoadingNextCustomer(false);
       } else {
         dispatch(onUnmountRoom());
         history.push("/");
@@ -46,24 +110,109 @@ function AddCustomerToRoom() {
     }
   }, [rooms.successGetRoom, rooms.room, id, history, dispatch]);
 
+  useEffect(() => {
+    if (customers.successCustomer) {
+      setLoadingButtonCustomer(false);
+      setShowModalCustomer(false);
+      setCustomer({});
+      dispatch(onUnmountCustomer());
+    }
+  }, [customers.successCustomer, dispatch]);
+
+  // function
+  function handleModalCustomer() {
+    dispatch(onUnSuccessCustomer());
+    setShowModalCustomer(!showModalCustomer);
+  }
+  function handleCancel() {
+    setShowModalCustomer(false);
+  }
+  function handleSubmitCustomer(values) {
+    setLoadingButtonCustomer(true);
+    dispatch(onAddCustomerToRoom(room._id, values));
+  }
+  function handleSubmitNextCustomer() {
+    const { customers } = room;
+    setLoadingNextCustomer(true);
+    if (isEmpty(customers)) {
+      console.log("empty customers");
+    } else {
+      const customer = customers[0];
+      const data = {
+        id: room._id,
+        idCustomer: customer._id
+      };
+      dispatch(onAddCustomerToProcessing(data));
+    }
+  }
   return (
     <Fragment>
-      <h3>ID: {id}</h3>
-      <List
-        itemLayout="horizontal"
-        dataSource={data}
-        renderItem={item => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={
-                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-              }
-              title={<a href="https://ant.design">{item.title}</a>}
-              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-            />
-          </List.Item>
-        )}
+      <Row>
+        <Col span={24}>
+          <Button
+            style={{
+              float: "right",
+              marginBottom: "15px"
+            }}
+            default
+            icon={<CaretRightFilled />}
+            onClick={() => handleSubmitNextCustomer()}
+            loading={loadingNextCustomer}
+          >
+            Next Customer
+          </Button>
+          <Button
+            style={{
+              float: "right",
+              marginBottom: "15px",
+              marginRight: "15px"
+            }}
+            type="primary"
+            onClick={() => handleModalCustomer()}
+          >
+            Create Customer
+          </Button>
+        </Col>
+        <ModalCustomer
+          title="Create and add customer to room"
+          visible={showModalCustomer}
+          customer={customer}
+          setCustomer={setCustomer}
+          onCancel={handleCancel}
+          onFinish={handleSubmitCustomer}
+          loading={loadingButtonCustomer}
+        />
+      </Row>
+      <Alert
+        message={`Current Customer: ${
+          isEmpty(room.currentCustomer) ? "empty" : room.currentCustomer.name
+        }
+            `}
+        type="info"
+        showIcon
       />
+      <Divider />
+      <div className="container-customers">
+        <Title level={3}>Customers Is Quere</Title>
+        <Table
+          rowKey={"_id"}
+          columns={columnCustomers}
+          dataSource={room.customers}
+          pagination={{ pageSize: 50 }}
+          scroll={{ y: 240 }}
+        />
+      </div>
+
+      <div className="container-customers-finished">
+        <Title level={3}>Customers Finished In Room</Title>
+        <Table
+          rowKey={"_id"}
+          columns={columnCustomersFinished}
+          dataSource={room.finishedCustomers}
+          pagination={{ pageSize: 50 }}
+          scroll={{ y: 240 }}
+        />
+      </div>
     </Fragment>
   );
 }

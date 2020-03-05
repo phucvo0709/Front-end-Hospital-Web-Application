@@ -48,7 +48,8 @@ const reducer = (state = initialState, action) => {
     case SET_ROOM:
       return {
         ...state,
-        room: action.payload
+        room: action.payload,
+        successGetRoom: true
       };
     case UN_ROOM:
       return {

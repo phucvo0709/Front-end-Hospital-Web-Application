@@ -18,7 +18,9 @@ export {
   onGetRoom,
   onAddRoom,
   onUpdateRoom,
-  onDeleteRoom
+  onDeleteRoom,
+  onAddCustomerToRoom,
+  onAddCustomerToProcessing
 } from "./roomActions";
 //CUSTOMERS
 export {

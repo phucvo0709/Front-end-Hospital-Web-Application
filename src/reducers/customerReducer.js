@@ -7,6 +7,7 @@ import {
   UN_CUSTOMER,
   SET_METADATA_CUSTOMERS,
   UN_METADATA_CUSTOMERS,
+  SET_SUCCESS_CUSTOMER,
   UN_SUCCESS_CUSTOMER,
   SET_CUSTOMER_IN_CUSTOMERS
 } from "./../constants/actionTypes";
@@ -75,6 +76,11 @@ const reducer = (state = initialState, action) => {
           }
           return customer;
         })
+      };
+    case SET_SUCCESS_CUSTOMER:
+      return {
+        ...state,
+        successCustomer: true
       };
     case UN_SUCCESS_CUSTOMER:
       return {

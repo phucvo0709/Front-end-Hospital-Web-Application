@@ -8,7 +8,8 @@ import {
   PULL_ROOM,
   SET_ROOM_IN_ROOMS,
   SET_SUCCESS_GET_ROOM,
-  UN_SUCCESS_GET_ROOM
+  UN_SUCCESS_GET_ROOM,
+  SET_SUCCESS_CUSTOMER
 } from "./../constants/actionTypes";
 
 export const onGetRooms = metadata => dispatch => {
@@ -60,6 +61,47 @@ export const onAddRoom = data => dispatch => {
     .then(res => {
       dispatch({
         type: PUSH_ROOM,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const onAddCustomerToRoom = (idRoom, data) => dispatch => {
+  axios
+    .post(`customers/`, data)
+    .then(res => {
+      axios
+        .post("rooms/add-customer-to-room/", {
+          id: idRoom,
+          idCustomer: res.data._id
+        })
+        .then(res => {
+          dispatch({
+            type: SET_ROOM,
+            payload: res.data
+          });
+          dispatch({
+            type: SET_SUCCESS_CUSTOMER
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const onAddCustomerToProcessing = data => dispatch => {
+  axios
+    .post("rooms/add-customer-processing/", data)
+    .then(res => {
+      dispatch({
+        type: SET_ROOM,
         payload: res.data
       });
     })
