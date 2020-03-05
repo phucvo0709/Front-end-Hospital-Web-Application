@@ -132,10 +132,16 @@ function AddCustomerToRoom() {
     dispatch(onAddCustomerToRoom(room._id, values));
   }
   function handleSubmitNextCustomer() {
-    const { customers } = room;
+    const { customers, currentCustomer } = room;
     setLoadingNextCustomer(true);
     if (isEmpty(customers)) {
-      console.log("empty customers");
+      if (!isEmpty(currentCustomer)) {
+        const data = {
+          id: room._id,
+          idCustomer: room.currentCustomer
+        };
+        dispatch(onAddCustomerToProcessing(data));
+      }
     } else {
       const customer = customers[0];
       const data = {
@@ -158,6 +164,11 @@ function AddCustomerToRoom() {
             icon={<CaretRightFilled />}
             onClick={() => handleSubmitNextCustomer()}
             loading={loadingNextCustomer}
+            disabled={
+              isEmpty(room.customers) && isEmpty(room.currentCustomer)
+                ? true
+                : false
+            }
           >
             Next Customer
           </Button>
