@@ -34,6 +34,34 @@ function Rooms(props) {
       key: "name"
     },
     {
+      title: "Customers In Quere",
+      dataIndex: "customerQuere",
+      key: "customerQuere",
+      sorter: (a, b) => a.customers.length - b.customers.length,
+      render: (text, record) => {
+        return record.customers.length;
+      }
+    },
+    {
+      title: "Customers In Processing",
+      dataIndex: "customerProcessing",
+      key: "customerProcessing",
+      render: (text, record) => {
+        return isEmpty(record.currentCustomer)
+          ? "No Customer"
+          : record.currentCustomer.name;
+      }
+    },
+    {
+      title: "Customers In Finished",
+      dataIndex: "customerFinished",
+      key: "customerFinished",
+      sorter: (a, b) => a.finishedCustomers.length - b.finishedCustomers.length,
+      render: (text, record) => {
+        return record.finishedCustomers.length;
+      }
+    },
+    {
       title: "Action",
       dataIndex: "action",
       key: "action",
