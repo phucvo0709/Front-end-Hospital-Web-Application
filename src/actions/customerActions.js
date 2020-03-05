@@ -8,6 +8,8 @@ import {
   PULL_CUSTOMER,
   SET_CUSTOMER_IN_CUSTOMERS
 } from "./../constants/actionTypes";
+import isEmpty from "../validation/is-empty";
+import { onGetRoom } from "./roomActions";
 
 export const onGetCustomers = metadata => dispatch => {
   axios
@@ -74,14 +76,18 @@ export const onUpdateCustomer = (id, data) => dispatch => {
     });
 };
 
-export const onDeleteCustomer = id => dispatch => {
+export const onDeleteCustomer = (idCustomer, idRoom) => dispatch => {
   axios
-    .delete(`customers/${id}/`)
+    .delete(`customers/${idCustomer}/`)
     .then(res => {
-      dispatch({
-        type: PULL_CUSTOMER,
-        payload: id
-      });
+      if (isEmpty(idRoom)) {
+        dispatch({
+          type: PULL_CUSTOMER,
+          payload: idCustomer
+        });
+      } else {
+        dispatch(onGetRoom(idRoom));
+      }
     })
     .catch(err => {
       console.log(err);

@@ -7,13 +7,24 @@ import {
   onUnmountCustomer,
   onUnSuccessCustomer,
   onAddCustomerToRoom,
-  onAddCustomerToProcessing
+  onAddCustomerToProcessing,
+  onDeleteCustomer
 } from "../actions";
 import isEmpty from "../validation/is-empty";
 import ModalCustomer from "../components/Customers/ModalCustomer";
 import { dateFormat } from "../utils/dateFormat";
-import { Table, Row, Col, Button, Typography, Alert, Divider } from "antd";
-import { CaretRightFilled } from "@ant-design/icons";
+import { TEXT_CONFIRM_DELETE } from "../constants/message";
+import {
+  Popconfirm,
+  Table,
+  Row,
+  Col,
+  Button,
+  Typography,
+  Alert,
+  Divider
+} from "antd";
+import { CaretRightFilled, EditFilled, DeleteFilled } from "@ant-design/icons";
 const { Title } = Typography;
 
 function AddCustomerToRoom() {
@@ -39,32 +50,32 @@ function AddCustomerToRoom() {
       render: (text, record) => {
         return dateFormat(record.createdAt);
       }
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      width: "10%",
+      render: (text, record) => {
+        return (
+          <span className="container-buttons">
+            <Button
+              type="primary"
+              icon={<EditFilled />}
+              onClick={() => handleModalCustomer(record._id)}
+            />
+            <Divider type="vertical" />
+            <Popconfirm
+              placement="bottomRight"
+              title={TEXT_CONFIRM_DELETE}
+              onConfirm={() => handleDeleteRecord(record._id)}
+            >
+              <Button type="danger" icon={<DeleteFilled />} />
+            </Popconfirm>
+          </span>
+        );
+      }
     }
-    // {
-    //   title: "Action",
-    //   dataIndex: "action",
-    //   key: "action",
-    //   width: "10%",
-    //   render: (text, record) => {
-    //     return (
-    //       <span className="container-buttons">
-    //         <Button
-    //           type="primary"
-    //           icon={<EditFilled />}
-    //           onClick={() => handleModalCustomer(record._id)}
-    //         />
-    //         <Divider type="vertical" />
-    //         <Popconfirm
-    //           placement="bottomRight"
-    //           title={TEXT_CONFIRM_DELETE}
-    //           onConfirm={() => handleDeleteRecord(record._id)}
-    //         >
-    //           <Button type="danger" icon={<DeleteFilled />} />
-    //         </Popconfirm>
-    //       </span>
-    //     );
-    //   }
-    // }
   ]);
   const [columnCustomersFinished] = useState([
     {
@@ -150,6 +161,9 @@ function AddCustomerToRoom() {
       };
       dispatch(onAddCustomerToProcessing(data));
     }
+  }
+  function handleDeleteRecord(idCustomer) {
+    dispatch(onDeleteCustomer(idCustomer, id));
   }
   return (
     <Fragment>
