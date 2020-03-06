@@ -10,7 +10,8 @@ import {
   onAddCustomerToProcessing,
   onDeleteCustomer,
   onGetCustomer,
-  onUpdateCustomer
+  onUpdateCustomer,
+  onUpdateRoom
 } from "../actions";
 import isEmpty from "../validation/is-empty";
 import ModalCustomer from "../components/Customers/ModalCustomer";
@@ -20,6 +21,9 @@ import {
   TEXT_CREATE_CUSTOMER,
   TEXT_UPDATE_CUSTOMER
 } from "../constants/message";
+import { DndProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
+import update from "immutability-helper";
 import {
   Popconfirm,
   Table,
@@ -31,9 +35,11 @@ import {
   Divider
 } from "antd";
 import { CaretRightFilled, EditFilled, DeleteFilled } from "@ant-design/icons";
+import TableDrag from "../components/UI/TableDrag";
 const { Title } = Typography;
 
 function AddCustomerToRoom() {
+  //table
   let history = useHistory();
   let { id } = useParams();
   //hooks
@@ -88,18 +94,6 @@ function AddCustomerToRoom() {
       title: "Name",
       dataIndex: "name",
       key: "name"
-    },
-    {
-      title: "Created At",
-      dataIndex: "",
-      key: "createdAt",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => {
-        return a.createdAt.localeCompare(b.createdAt);
-      },
-      render: (text, record) => {
-        return dateFormat(record.createdAt);
-      }
     }
   ]);
   const [loadingNextCustomer, setLoadingNextCustomer] = useState(false);
@@ -196,6 +190,21 @@ function AddCustomerToRoom() {
   function handleDeleteRecord(idCustomer) {
     dispatch(onDeleteCustomer(idCustomer, id));
   }
+
+  function moveRow(dragIndex, hoverIndex) {
+    console.log(dragIndex, hoverIndex);
+    const dragRow = room.customers[dragIndex];
+
+    const newData = update(room, {
+      customers: {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragRow]
+        ]
+      }
+    });
+    dispatch(onUpdateRoom(room._id, newData, "inRoom"));
+  }
   return (
     <Fragment>
       <Row>
@@ -250,13 +259,24 @@ function AddCustomerToRoom() {
       <Divider />
       <div className="container-customers">
         <Title level={3}>Customers Is Quere</Title>
-        <Table
-          rowKey={"_id"}
-          columns={columnCustomers}
-          dataSource={room.customers}
-          pagination={{ pageSize: 50 }}
-          scroll={{ y: 240 }}
-        />
+        <DndProvider backend={HTML5Backend}>
+          <Table
+            rowKey={"_id"}
+            columns={columnCustomers}
+            dataSource={room.customers}
+            pagination={{ pageSize: 50 }}
+            scroll={{ y: 240 }}
+            components={{
+              body: {
+                row: TableDrag
+              }
+            }}
+            onRow={(record, index) => ({
+              index,
+              moveRow
+            })}
+          />
+        </DndProvider>
       </div>
 
       <div className="container-customers-finished">

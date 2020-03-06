@@ -110,14 +110,21 @@ export const onAddCustomerToProcessing = data => dispatch => {
     });
 };
 
-export const onUpdateRoom = (id, data) => dispatch => {
+export const onUpdateRoom = (id, data, inRoom) => dispatch => {
   axios
     .put(`rooms/${id}/`, data)
     .then(res => {
-      dispatch({
-        type: SET_ROOM_IN_ROOMS,
-        payload: res.data
-      });
+      if (inRoom) {
+        dispatch({
+          type: SET_ROOM,
+          payload: res.data
+        });
+      } else {
+        dispatch({
+          type: SET_ROOM_IN_ROOMS,
+          payload: res.data
+        });
+      }
     })
     .catch(err => {
       console.log(err);
