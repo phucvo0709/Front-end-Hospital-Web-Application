@@ -11,7 +11,7 @@ import {
 } from "./../constants/actionTypes";
 import isEmpty from "../validation/is-empty";
 import { onGetRoom } from "./roomActions";
-import socket from "../utils/socketIo";
+import socketIo from "../utils/socketIo";
 
 export const onGetCustomers = metadata => dispatch => {
   axios
@@ -54,7 +54,7 @@ export const onAddCustomer = data => dispatch => {
   axios
     .post(`customers/`, data)
     .then(res => {
-      socket.emit("newCustomers");
+      socketIo.emit("newCustomers");
       dispatch({
         type: PUSH_CUSTOMER,
         payload: res.data

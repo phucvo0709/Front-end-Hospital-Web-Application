@@ -1,3 +1,5 @@
+export { onSetSocketId } from "./socketActions";
+
 export { onSetAlert } from "./alertActions";
 //AUTH
 export { onGetProfireUser } from "./authActions";
@@ -5,6 +7,7 @@ export { onGetProfireUser } from "./authActions";
 export { setSuccess, unSuccess, setError, unError } from "./statusActions";
 // UNMOUNT
 export {
+  onUnSocket,
   onUnmountStatus,
   onUnmountCustomers,
   onUnmountCustomer,

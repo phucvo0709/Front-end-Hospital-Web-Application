@@ -11,7 +11,7 @@ import {
   UN_SUCCESS_GET_ROOM,
   SET_SUCCESS_CUSTOMER
 } from "./../constants/actionTypes";
-import socket from "../utils/socketIo";
+import socketIo from "../utils/socketIo";
 
 export const onGetRooms = metadata => dispatch => {
   axios
@@ -60,7 +60,7 @@ export const onAddRoom = data => dispatch => {
   axios
     .post(`rooms/`, data)
     .then(res => {
-      socket.emit("newRooms");
+      socketIo.emit("newRooms");
       dispatch({
         type: PUSH_ROOM,
         payload: res.data
@@ -75,7 +75,7 @@ export const onAddCustomerToRoom = (idRoom, data) => dispatch => {
   axios
     .post(`customers/`, data)
     .then(res => {
-      socket.emit("newCustomers");
+      socketIo.emit("newCustomers");
       axios
         .post("rooms/add-customer-to-room/", {
           id: idRoom,

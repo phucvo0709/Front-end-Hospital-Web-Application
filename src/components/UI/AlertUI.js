@@ -2,29 +2,37 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "antd";
 import { onSetAlert } from "../../actions";
-import socket from "../../utils/socketIo";
+import socketIo from "../../utils/socketIo";
 
 function AlertUI() {
   const dispatch = useDispatch();
-
+  const socket = useSelector(state => state.socket);
   const alert = useSelector(state => state.alert);
 
-  socket.on("haveNewRooms", function() {
-    dispatch(
-      onSetAlert({
-        type: "info",
-        text: "Have new rooms"
-      })
-    );
+  socketIo.on("haveNewRooms", function(id) {
+    if (socket.socketId) {
+      if (socket.socketId !== id) {
+        dispatch(
+          onSetAlert({
+            type: "info",
+            text: "Have new Rooms"
+          })
+        );
+      }
+    }
   });
 
-  socket.on("haveNewCustomers", function() {
-    dispatch(
-      onSetAlert({
-        type: "info",
-        text: "Have new customers"
-      })
-    );
+  socketIo.on("haveNewCustomers", function(id) {
+    if (socket.socketId) {
+      if (socket.socketId !== id) {
+        dispatch(
+          onSetAlert({
+            type: "info",
+            text: "Have new customers"
+          })
+        );
+      }
+    }
   });
 
   return (

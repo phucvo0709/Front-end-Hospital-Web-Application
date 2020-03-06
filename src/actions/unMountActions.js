@@ -9,8 +9,17 @@ import {
   UN_METADATA_CUSTOMERS,
   UN_SUCCESS_ROOM,
   UN_SUCCESS_CUSTOMER,
-  UN_ALERT
+  UN_ALERT,
+  UN_SOCKET_ID
 } from "../constants/actionTypes";
+
+export const onUnSocket = () => dispatch => {
+  return batch(() => {
+    dispatch({
+      type: UN_SOCKET_ID
+    });
+  });
+};
 
 export const onUnmountStatus = () => dispatch => {
   return dispatch({

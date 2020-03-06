@@ -1,3 +1,6 @@
+export const SET_SOCKET_ID = "SET_SOCKET_ID";
+export const UN_SOCKET_ID = "UN_SOCKET_ID";
+
 //AUTH
 export const SET_USER = "SET_USER";
 export const UN_USER = "UN_USER";
