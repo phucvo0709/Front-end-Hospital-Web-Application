@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Redirect, Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import HeadComponent from "../../components/HeadComponent";
-import { Layout, Menu, Avatar } from "antd";
+import { Layout, Menu, Avatar, Row, Col } from "antd";
+import AlertUI from "../../components/UI/AlertUI";
 import { UserOutlined, VideoCameraOutlined } from "@ant-design/icons";
+import { onUnAlert } from "../../actions";
 const { Header, Content, Sider } = Layout;
 
 function PrivateLayout(props) {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const [localLocation, setLocalLocation] = useState({});
   const [menus] = useState([
     {
       id: 1,
@@ -22,20 +28,17 @@ function PrivateLayout(props) {
       icon: <UserOutlined />
     }
   ]);
-  const location = useLocation();
+  useEffect(() => {
+    if (localLocation !== location) {
+      setLocalLocation(location);
+      dispatch(onUnAlert());
+    }
+  }, [localLocation, location, dispatch]);
+
   return (
     <Layout style={{ height: "100vh" }}>
       <HeadComponent />
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        // onBreakpoint={broken => {
-        //   console.log(broken);
-        // }}
-        // onCollapse={(collapsed, type) => {
-        //   console.log(collapsed, type);
-        // }}
-      >
+      <Sider breakpoint="lg" collapsedWidth="0">
         <div
           className="logo"
           style={{
@@ -44,7 +47,11 @@ function PrivateLayout(props) {
             margin: "16px"
           }}
         />
-        <Menu theme="dark" mode="inline" selectedKeys={[location.pathname]}>
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={[localLocation.pathname]}
+        >
           {menus.map(menu => {
             return (
               <Menu.Item key={menu.link}>
@@ -64,9 +71,16 @@ function PrivateLayout(props) {
           className="site-layout-sub-header-background"
           style={{ padding: 0 }}
         >
-          <div style={{ float: "right", paddingRight: "15px" }}>
-            <Avatar size={32} icon={<UserOutlined />} />
-          </div>
+          <Row>
+            <Col span={20}>
+              <AlertUI />
+            </Col>
+            <Col span={4}>
+              <div style={{ float: "right", paddingRight: "15px" }}>
+                <Avatar size={32} icon={<UserOutlined />} />
+              </div>
+            </Col>
+          </Row>
         </Header>
         <Content style={{ margin: "24px 16px 0" }}>{props.children}</Content>
       </Layout>

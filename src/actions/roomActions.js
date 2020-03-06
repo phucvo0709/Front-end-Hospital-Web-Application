@@ -11,9 +11,7 @@ import {
   UN_SUCCESS_GET_ROOM,
   SET_SUCCESS_CUSTOMER
 } from "./../constants/actionTypes";
-import { DEFAULT_SOCKETURL } from "../constants/config";
-const io = require("socket.io-client");
-const socket = io(DEFAULT_SOCKETURL);
+import socket from "../utils/socketIo";
 
 export const onGetRooms = metadata => dispatch => {
   axios

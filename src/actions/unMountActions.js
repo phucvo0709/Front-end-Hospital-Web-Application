@@ -8,7 +8,8 @@ import {
   UN_CUSTOMER,
   UN_METADATA_CUSTOMERS,
   UN_SUCCESS_ROOM,
-  UN_SUCCESS_CUSTOMER
+  UN_SUCCESS_CUSTOMER,
+  UN_ALERT
 } from "../constants/actionTypes";
 
 export const onUnmountStatus = () => dispatch => {
@@ -87,6 +88,14 @@ export const onUnSuccessCustomer = () => dispatch => {
   return batch(() => {
     dispatch({
       type: UN_SUCCESS_CUSTOMER
+    });
+  });
+};
+
+export const onUnAlert = () => dispatch => {
+  return batch(() => {
+    dispatch({
+      type: UN_ALERT
     });
   });
 };

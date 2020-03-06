@@ -1,3 +1,4 @@
+export { onSetAlert } from "./alertActions";
 //AUTH
 export { onGetProfireUser } from "./authActions";
 //STATUS
@@ -10,7 +11,8 @@ export {
   onUnSuccessCustomer,
   onUnmountRooms,
   onUnmountRoom,
-  onUnSuccessRoom
+  onUnSuccessRoom,
+  onUnAlert
 } from "./unMountActions";
 //ROOMS
 export {
