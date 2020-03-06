@@ -11,8 +11,9 @@ import {
 } from "./../constants/actionTypes";
 import isEmpty from "../validation/is-empty";
 import { onGetRoom } from "./roomActions";
+import { DEFAULT_SOCKETURL } from "../constants/config";
 const io = require("socket.io-client");
-const socket = io("http://localhost:4000");
+const socket = io(DEFAULT_SOCKETURL);
 
 export const onGetCustomers = metadata => dispatch => {
   axios

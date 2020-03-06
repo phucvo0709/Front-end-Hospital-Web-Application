@@ -20,7 +20,13 @@ import {
   TEXT_CREATE_CUSTOMER,
   TEXT_UPDATE_CUSTOMER
 } from "../constants/message";
+import { DEFAULT_SOCKETURL } from "../constants/config";
 
+const io = require("socket.io-client");
+const socket = io(DEFAULT_SOCKETURL);
+socket.on("haveNewCustomers", function() {
+  console.log("ok");
+});
 function Customers(props) {
   //hooks
   const customers = useSelector(state => state.customers);

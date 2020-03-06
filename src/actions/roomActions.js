@@ -11,8 +11,9 @@ import {
   UN_SUCCESS_GET_ROOM,
   SET_SUCCESS_CUSTOMER
 } from "./../constants/actionTypes";
+import { DEFAULT_SOCKETURL } from "../constants/config";
 const io = require("socket.io-client");
-const socket = io("http://localhost:4000");
+const socket = io(DEFAULT_SOCKETURL);
 
 export const onGetRooms = metadata => dispatch => {
   axios
@@ -76,6 +77,7 @@ export const onAddCustomerToRoom = (idRoom, data) => dispatch => {
   axios
     .post(`customers/`, data)
     .then(res => {
+      socket.emit("newCustomers");
       axios
         .post("rooms/add-customer-to-room/", {
           id: idRoom,
