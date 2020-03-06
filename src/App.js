@@ -10,6 +10,7 @@ import Routes from "./pages";
 
 function App(props) {
   const { store } = props;
+
   return (
     <Provider store={store}>
       <Router>
